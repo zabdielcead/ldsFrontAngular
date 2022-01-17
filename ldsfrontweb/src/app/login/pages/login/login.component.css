@@ -1,0 +1,32 @@
+.login-form-flex {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    
+  }
+  
+  .button-flex-container {
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+
+  .bgimg {
+    background-size: cover; 
+    height:80%;
+    background-color: transparent;
+    object-fit: cover;
+    background: url('../../../../assets/templovfff.jpg') ;
+  }
+
+
+  .center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -moz-transform: translateX(-50%) translateY(-50%);
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+}

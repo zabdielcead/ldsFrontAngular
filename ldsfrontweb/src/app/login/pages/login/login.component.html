@@ -1,0 +1,70 @@
+
+<div class="bgimg">
+
+    <form [formGroup]="miFormulario" (ngSubmit)="login()">
+            <div class="center" >
+
+                <ng-container *ngIf="!loadingSpinner">
+                        <mat-card>
+                                <mat-card-title>
+                                    Login - Barrio Alta Tensión
+                                </mat-card-title>
+                            
+                                <mat-card-content>
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>Usuario</mat-label>
+                                        <input 
+                                                matInput 
+                                                placeholder="Usuario" 
+                                                formControlName="user">
+                                        <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+                                        <mat-hint   *ngIf="campoNoValido('user')">El usuario es obligatorio</mat-hint>
+                                    
+                                    </mat-form-field>
+                                    <br/>
+                                    <br/>
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>Password</mat-label>
+                                        <input 
+                                                matInput 
+                                                placeholder="Password"
+                                                formControlName="pass">
+                                        <mat-icon matSuffix>network_locked</mat-icon>
+                                        <mat-hint  *ngIf="campoNoValido('pass')">El password es obligatorio</mat-hint>
+                                    </mat-form-field>
+                                
+                                </mat-card-content>
+                            
+                                <mat-divider></mat-divider>
+                                <mat-card-content *ngIf="errorMsg">
+                                    <mat-toolbar>
+                                    <mat-label>
+                                        <mat-icon aria-hidden="false" aria-label="Example home icon" class="material-icons color_green">mood_bad</mat-icon>
+                                        <span class="errorgen"> Login Incorrecto: Verifica tus credenciales con el Administrador </span>
+                                        <mat-icon aria-hidden="false" aria-label="Example home icon" class="material-icons color_green">mood_bad</mat-icon>
+                                    </mat-label>
+                                    </mat-toolbar>
+                                </mat-card-content>
+                            
+                                <mat-card-actions>
+                                    <div class="button-flex-container">
+                                        <button mat-raised-button color="primary" type="submit"  [disabled]="!miFormulario.valid">Login</button>
+                                    </div>
+                                </mat-card-actions>
+                        </mat-card>
+                </ng-container>
+                <ng-container *ngIf="loadingSpinner">
+                    <mat-progress-spinner mode="indeterminate" diameter='200' strokeWidth='30' class="center" >
+                    </mat-progress-spinner>
+                </ng-container>    
+            </div>
+
+           
+    </form>
+    
+    <h3>Formulario</h3>
+    <pre>Valid: {{miFormulario.valid}}</pre>
+    <pre>Value: {{miFormulario.value | json}}</pre>
+   
+
+</div>
