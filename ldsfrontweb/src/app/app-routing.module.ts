@@ -7,6 +7,10 @@ const routes: Routes = [
     loadChildren:() => import('./login/login.module').then(m=> m.LoginModule)
   },
   {
+    path:'appBat',
+    loadChildren:() => import('./application/application.module').then(m=> m.ApplicationModule)
+  },
+  {
     path: '**', 
     redirectTo: 'auth'
   }
