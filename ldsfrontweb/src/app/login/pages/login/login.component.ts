@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LoginService } from 'src/app/services/login.service';
-import { ReqLoginDto } from '../../../interfaces/login/login.interface';
+import { ReqFindUser, ReqLoginDto, ResFindUser, ResLoginDto, CookieUser } from '../../../interfaces/login/login.interface';
+import { map, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-login',
@@ -30,12 +31,35 @@ export class LoginComponent implements OnInit {
 
 
   ngOnInit(): void {
+    //conultarcookie
+
+    console.log('cookie');
+    this.loginService.consultaCookieUser();
+
   }
 
-  login(){
+  login() {
     console.log('loginrespuesta');
     this.loadingSpinner = true;
-    this.loginService.getLoginData(this.dataRequest).subscribe(
+    let dataLogin!: ResLoginDto;
+    let dataUser!: ResFindUser;
+
+      this.loginService.getLoginData(this.dataRequest).pipe(
+          switchMap( res => {
+            dataLogin = res;
+            console.log('primer response', res);
+  
+            return this.loginService.getUserData(this.dataUserRequest(dataLogin.idUsuario,dataLogin.email), dataLogin.jwt)
+          })
+      ).pipe(
+          map(resp =>{
+            console.log('segundo response response', resp);
+            dataUser = resp;
+
+             this.loginService.setCookieUser(dataLogin, dataUser);
+
+          })
+      ).subscribe(
         next => {
           console.log('response', next);
           this.errorMsg = false;
@@ -44,14 +68,68 @@ export class LoginComponent implements OnInit {
           console.log('error res')
           this.errorMsg = true;
           this.loadingSpinner = false;
+          return;
         },() =>{
           //console.log('error fin');
           this.errorMsg = false;
           this.loadingSpinner = false;
         }
-    )
+      );
 
-  }
+
+      
+    }
+
+    
+
+    /*
+    
+
+     this.loginService.getLoginData(this.dataRequest).subscribe(
+        next => {
+          console.log('response', next);
+          this.errorMsg = false;
+          dataLogin = next;
+        },
+        error =>{
+          console.log('error res')
+          this.errorMsg = true;
+          this.loadingSpinner = false;
+          return;
+        },() =>{
+          //console.log('error fin');
+          this.errorMsg = false;
+          //this.loadingSpinner = false;
+        }
+      
+    )
+    // si existe vamos por la data del usuario
+
+    let dataUser!: ResFindUser;
+    this.loginService.getUserData(this.dataUserRequest(dataLogin.idUsuario,dataLogin.email), dataLogin.jwt).subscribe(
+      next => {
+        console.log('response getUserData', next);
+        this.errorMsg = false;
+        dataUser = next;
+      },
+      error =>{
+        console.log('error res')
+        this.errorMsg = true;
+        this.loadingSpinner = false;
+        return;
+      },() =>{
+        //console.log('error fin');
+        this.errorMsg = false;
+        this.loadingSpinner = false;
+      }
+    
+  )
+    
+    
+    */
+    
+
+  
   logout(){
 
   }
@@ -86,6 +164,27 @@ export class LoginComponent implements OnInit {
 
     return reqLogin;
   }
+
+   dataUserRequest(idUsuario: string, email:string):ReqFindUser{
+
+    
+
+    let reqLogin: ReqFindUser = {
+      idUsuario: idUsuario,
+      email: email,
+     
+    };
+
+  
+
+
+
+
+    return reqLogin;
+  }
+
+
+  
 
   
 

@@ -5,7 +5,9 @@
 export const environment = {
   production: false,
   urlBase: 'https://lds-nest-back-swart.vercel.app/',
-  endPointLogin: 'auth/login'
+  endPointLogin: 'auth/login',
+  endPoinFindUser: 'users/findUser',
+  nameCookie: 'cookieldsbat'
 };
 
 /*
